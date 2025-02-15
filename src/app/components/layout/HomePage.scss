@@ -1,0 +1,79 @@
+@use '../../styles/mixins.scss' as *;
+@use '../../styles/variables.scss' as *;
+
+.home-page {
+    width: 100%;
+    height: 100%;
+    padding: 30px 0;
+    &-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+        gap: 20px;
+
+        @media (max-width: 40rem) {
+            grid-template-columns: repeat(auto-fill, minmax(10rem, 2fr));
+            gap: 5px;
+        }
+    }
+
+    &-card-container {
+        background-color: $white_color;
+        padding: 0.8rem;
+        border-radius: 1.1rem;
+    }
+
+    &-image-container {
+        position: relative;
+        @include flex-center;
+
+        img {
+            width: 100%;
+            max-width: 100%;
+            height: 15rem;
+            object-fit: contain;
+        }
+    }
+
+    &-card-like {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 2rem;
+
+    }
+
+    &-card-detail-container {
+        color: $primary_color;
+    }
+
+    &-card-title-header {
+        margin-top: 20px;
+        @include flex-center-space-between;
+    }
+
+    &-card-title {
+        font-size: 1.2rem;
+    }
+
+    &-card-rating {
+        color: red;
+        font-size: 1rem;
+    }
+
+    &-card-description {
+        margin-top: 0.5rem;
+        @include multi-line-ellipsis(3)
+    }
+
+    &-card-price {
+        margin-top: 0.5rem;
+        font-size: 1.2rem;
+
+        span {
+            text-decoration: line-through;
+            opacity: 0.6;
+            font-size: 0.8rem;
+            padding-left: 0.6em;
+        }
+    }
+}

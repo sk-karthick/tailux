@@ -1,0 +1,35 @@
+@use '../../styles/mixins.scss' as *;
+@use '../../styles/variables.scss' as *;
+
+.footer-menu {
+    width: 100%;
+    @include position-fixed(auto, auto, 0em, auto);
+    background-color: $primary_color;
+
+    ul {
+        width: calc(100% - 2em);
+        margin: auto;
+        @include flex-center-space-between;
+        height: 3rem;
+    }
+
+    li {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        @include flex-center;
+
+        svg {
+            color: $white_color;
+            font-size: 1.3rem;
+        }
+
+        &:hover {
+            background-color: #df8fad;
+
+            svg {
+                color: $primary_color;
+            }
+        }
+    }
+}
