@@ -8,11 +8,6 @@
 .nav-bar {
 	background-color: $primary_color;
 	color: $white_color;
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	z-index: 1;
 
 	&-container {
 		// @include flex-center-space-between;

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 const useFetchData = (api_url: string) => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {

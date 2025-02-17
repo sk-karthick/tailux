@@ -22,7 +22,7 @@ html {
 }
 
 body {
-  background-color: var(--foreground);
+  // background-color: var(--foreground);
   color: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   font-size: 1rem;
@@ -32,12 +32,12 @@ body {
 }
 
 .page-container {
-  padding: 30px 10px;
+  width: 100%;
+  overflow-x: hidden;
   overflow-y: auto;
-  margin-top: 2.9rem;
-  height: calc(100vh - 9.5rem);
+  height: calc(99vh - 5.3rem);
 
   @media (max-width: 40rem) {
-    height: calc(100vh - 12.5rem);
+    height: calc(99vh - 8.5rem);
   }
 }

@@ -3,7 +3,6 @@
 
 .footer-menu {
     width: 100%;
-    @include position-fixed(auto, auto, 0em, auto);
     background-color: $primary_color;
 
     ul {
