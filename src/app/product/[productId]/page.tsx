@@ -4,7 +4,13 @@ import useFetchData from "@/app/hooks/useFetchData";
 import { useParams, useRouter } from "next/navigation";
 import './page.scss';
 import { IoIosArrowBack } from "react-icons/io";
-import { IoShareOutline } from "react-icons/io5";
+import LoadingSpinner from "@/app/components/UI/LoadingSpinner";
+import Image from "next/image";
+import { FcLike, FcLikePlaceholder } from "react-icons/fc";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@reduxjs/toolkit/query";
+import { toggleLike } from "@/app/store/store";
+import { FaRegShareSquare } from "react-icons/fa";
 
 interface Product {
   id: number;
@@ -23,6 +29,20 @@ const ProductPage = () => {
   const router = useRouter();
   const productId = params?.productId;
 
+  const dispatch = useDispatch();
+  const likedProducts = useSelector((state: RootState) => state.likes.likedProducts);
+
+  const likeClick = (event: React.MouseEvent, productId: number) => {
+    event.stopPropagation();
+    dispatch(toggleLike(productId));
+
+    fetch("/api/like", {
+      method: "POST",
+      body: JSON.stringify({ productId }),
+      headers: { "Content-Type": "application/json" },
+    });
+  };
+
   const api_url = `https://fakestoreapi.com/products/${productId}`;
   const { data, error } = useFetchData(api_url)<Product> as { data: Product; error: any };
 
@@ -31,7 +51,7 @@ const ProductPage = () => {
   }
 
   if (!data) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   return (
@@ -39,9 +59,18 @@ const ProductPage = () => {
       <div className="product-image">
         <div className="action-buttons">
           <button onClick={() => router.back()}><IoIosArrowBack /></button>
-          <button><IoShareOutline /></button>
+          <div className="product-share-button">
+            <button onClick={(event) => likeClick(event, data.id)}>
+              {likedProducts.includes(data.id) ? <FcLike /> : <FcLikePlaceholder />}
+            </button>
+            <button><FaRegShareSquare /></button>
+          </div>
         </div>
-        <img src={data.image} alt={data.title} />
+        {data.image ? (
+          <Image src={data.image} alt={data.title} width={500} height={500} />
+        ) : (
+          <LoadingSpinner />
+        )}
       </div>
       <div className="product-details">
         <p className="product-category">{data.category}</p>

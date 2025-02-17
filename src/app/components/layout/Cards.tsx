@@ -1,6 +1,7 @@
 "use client";
 
 import { RootState, toggleLike } from '@/app/store/store';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { FcLike, FcLikePlaceholder } from 'react-icons/fc';
@@ -53,10 +54,8 @@ const Cards: React.FC<CardProps> = (props) => {
 					onClick={() => cardClick(product.id)}
 				>
 					<div className='home-page-image-container'>
-						<img src={product.image} alt={product.title} />
+						<Image src={product.image} alt={product.title} width={500} height={500} />
 						<div className='home-page-card-like' onClick={(event) => likeClick(event, product.id)}>
-							{/* <FcLike />
-							<FcLikePlaceholder /> */}
 							{likedProducts.includes(product.id) ? <FcLike /> : <FcLikePlaceholder />}
 						</div>
 					</div>

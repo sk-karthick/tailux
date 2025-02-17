@@ -4,6 +4,7 @@ import useFetchData from '@/app/hooks/useFetchData';
 import React from 'react';
 import './HomePage.scss';
 import Cards from './Cards';
+import LoadingSpinner from '../UI/LoadingSpinner';
 
 const HomePage = () => {
   const api_url = 'https://fakestoreapi.com/products';
@@ -13,7 +14,7 @@ const HomePage = () => {
   }
 
   if (!data) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   return (

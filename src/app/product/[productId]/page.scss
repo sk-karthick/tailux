@@ -6,11 +6,10 @@
   padding: 10px 20px;
 
   &-image {
+    position: relative;
     .action-buttons {
-      @include flex-center-space-between;
+      @include flex-start-space-between;
       padding-top: 30px;
-      position: sticky;
-      top: 0;
 
       button {
         @include flex-center;

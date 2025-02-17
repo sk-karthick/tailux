@@ -2,7 +2,6 @@
 
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// Define the initial state
 interface LikedState {
     likedProducts: number[];
 }
@@ -11,7 +10,6 @@ const initialState: LikedState = {
     likedProducts: [],
 };
 
-// Create a slice
 const likeSlice = createSlice({
     name: "likes",
     initialState,
