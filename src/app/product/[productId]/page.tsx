@@ -1,7 +1,7 @@
 "use client";  // ✅ Ensure this is here
 
 import useFetchData from "@/app/hooks/useFetchData";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import './page.scss';
 import { IoIosArrowBack } from "react-icons/io";
 import { IoShareOutline } from "react-icons/io5";
@@ -20,6 +20,7 @@ interface Product {
 
 const ProductPage = () => {
   const params = useParams();
+  const router = useRouter();
   const productId = params?.productId;
 
   const api_url = `https://fakestoreapi.com/products/${productId}`;
@@ -37,7 +38,7 @@ const ProductPage = () => {
     <div className="product">
       <div className="product-image">
         <div className="action-buttons">
-          <button><IoIosArrowBack /></button>
+          <button onClick={() => router.back()}><IoIosArrowBack /></button>
           <button><IoShareOutline /></button>
         </div>
         <img src={data.image} alt={data.title} />
@@ -45,7 +46,7 @@ const ProductPage = () => {
       <div className="product-details">
         <p className="product-category">{data.category}</p>
         <h2 className="product-title">{data.title}</h2>
-        <p className="product-title">{data.description}</p>
+        <p className="product-description">{data.description}</p>
         <p>${data.price}</p>
         <p>{data?.rating?.rate}</p>
       </div>

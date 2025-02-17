@@ -1,8 +1,12 @@
+"use client"
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.scss";
 import { Navbar } from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 export default function RootLayout({
   children,
@@ -14,7 +18,9 @@ export default function RootLayout({
       <body>
         <Navbar />
         <div className="page-container">
-          {children}
+          <Provider store={store}>
+            {children}
+          </Provider>
         </div>
         <Footer />
       </body>
