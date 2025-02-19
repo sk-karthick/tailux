@@ -3,10 +3,27 @@
 
 .spinner-overlay {
     @include flex-center;
-    position: fixed;
+    position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     background-color: black;
     z-index: 1000;
+
+    .spinner {
+        animation: rotate 0.5s infinite forwards ease;
+        font-size: 4rem;
+    }
+}
+
+@keyframes rotate {
+    0%{
+        transform: rotate(0deg);
+    }
+    50%, 75%{
+        transform: rotate(360deg);
+    }
+    100%{
+        transform: rotate(0deg);
+    }
 }

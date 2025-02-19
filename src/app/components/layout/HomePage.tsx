@@ -4,6 +4,7 @@ import useFetchData from '@/app/hooks/useFetchData';
 import React from 'react';
 import './HomePage.scss';
 import Cards from './Cards';
+import Slider from '../UI/Slider';
 import LoadingSpinner from '../UI/LoadingSpinner';
 
 const HomePage = () => {
@@ -19,7 +20,8 @@ const HomePage = () => {
 
   return (
     <div className='home-page'>
-      <Cards data={data}  />
+      <Slider data={data} />
+      <Cards data={data} />
     </div>
   );
 };

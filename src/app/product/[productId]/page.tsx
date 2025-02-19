@@ -1,16 +1,16 @@
 "use client";  // ✅ Ensure this is here
 
-import useFetchData from "@/app/hooks/useFetchData";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import './page.scss';
+import useFetchData from "@/app/hooks/useFetchData";
 import { IoIosArrowBack } from "react-icons/io";
 import LoadingSpinner from "@/app/components/UI/LoadingSpinner";
-import Image from "next/image";
 import { FcLike, FcLikePlaceholder } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@reduxjs/toolkit/query";
 import { toggleLike } from "@/app/store/store";
 import { FaRegShareSquare } from "react-icons/fa";
+import './page.scss';
 
 interface Product {
   id: number;
