@@ -31,12 +31,11 @@ const Cards: React.FC<CardProps> = (props) => {
 	const likeClick = (event: React.MouseEvent, productId: number) => {
 		event.stopPropagation();
 		dispatch(toggleLike(productId));
-
-		fetch("/api/like", {
-			method: "POST",
-			body: JSON.stringify({ productId }),
-			headers: { "Content-Type": "application/json" },
-		});
+		// fetch("/api/like", {
+		// 	method: "POST",
+		// 	body: JSON.stringify({ productId }),
+		// 	headers: { "Content-Type": "application/json" },
+		// });
 	};
 
 	const cardClick = (productId: number) => {

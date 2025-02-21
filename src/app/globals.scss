@@ -35,10 +35,10 @@ body {
   width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  height: calc(99vh - 5.3rem);
+  height: calc(99vh - 4.7rem);
   position: relative;
 
   @media (max-width: 40rem) {
-    height: calc(99vh - 8.5rem);
+    height: calc(99vh - 8.2rem);
   }
 }

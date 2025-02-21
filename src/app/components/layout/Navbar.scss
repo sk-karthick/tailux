@@ -5,7 +5,17 @@
 // For logo font
 @import url('https://fonts.google.com/share?selection.family=Playwrite+VN:wght@100..400');
 
+@font-face {
+	font-family: "Reospec";
+	src: url("/fonts/Reospec.woff2") format("woff2"),
+		url("/fonts/Reospec.woff") format("woff"),
+		url("/fonts/Reospec.otf") format("opentype");
+	font-weight: normal;
+	font-style: normal;
+}
+
 .nav-bar {
+	@include flex-center;
 	background-color: $primary_color;
 	color: $white_color;
 
@@ -13,17 +23,28 @@
 		// @include flex-center-space-between;
 		@include flex-center;
 		padding: 10px;
+		margin: 0 auto;
 	}
 
 	&-logo {
 		font-size: 1.4rem;
 		text-align: center;
+		font-family: "Reospec", sans-serif;
 
 		a {
 			color: $white_color;
 			padding: 5px;
-			font-family: "Playwrite VN", serif;
 			letter-spacing: 2px;
+		}
+	}
+
+	&-cart {
+		padding-right: 20px;
+		cursor: pointer;
+		transition: 0.2s ease all;
+
+		&:hover {
+			transform: scale(1.1);
 		}
 	}
 }
