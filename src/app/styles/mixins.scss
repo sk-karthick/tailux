@@ -1,0 +1,157 @@
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flex-end {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+}
+
+@mixin flex-center-space-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@mixin flex-baseline-space-between {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+@mixin flex-center-justify-start {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+@mixin flex-baseline-justify-start {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
+}
+
+@mixin flex-baseline-space-around {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-around;
+}
+
+@mixin flex-start-space-between {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+@mixin flex-center-justify-end {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+@mixin flex-start-justify-start {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+@mixin flex-end-justify-center {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+@mixin flex-start-justify-center {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+@mixin text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@mixin multi-line-ellipsis($line: 3) {
+    -webkit-line-clamp: $line;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: normal;
+}
+
+
+@mixin position($position: absolute, $top: auto, $right: auto, $bottom: auto, $left: auto) {
+    position: $position;
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+}
+
+@mixin position-fixed($top: auto, $right: auto, $bottom: auto, $left: auto) {
+    position: fixed;
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+}
+
+@mixin opacity($value) {
+    -moz-opacity: $value;
+    filter: alpha(opacity=$value * 100);
+    opacity: $value;
+}
+
+@mixin calc($key, $value) {
+    #{$key}: -moz-calc(#{$value});
+    #{$key}: -webkit-calc(#{$value});
+    #{$key}: -o-calc(#{$value});
+    #{$key}: calc(#{$value});
+}
+
+@mixin stylePlaceholder($key, $value) {
+    &::-webkit-input-placeholder {
+        #{$key}: #{$value};
+    }
+
+    &:-moz-placeholder {
+        #{$key}: #{$value};
+    }
+
+    &::-moz-placeholder {
+        #{$key}: #{$value};
+    }
+
+    &:-ms-input-placeholder {
+        #{$key}: #{$value};
+    }
+}
+
+@mixin box-shadow($x, $y, $blur, $spread, $color, $inset: false) {
+    $inset-value: if($inset, 'inset', '');
+    -webkit-box-shadow: #{$inset-value} #{$x} #{$y} #{$blur} #{$spread} #{$color};
+    -moz-box-shadow: #{$inset-value} #{$x} #{$y} #{$blur} #{$spread} #{$color};
+    -ms-box-shadow: #{$inset-value} #{$x} #{$y} #{$blur} #{$spread} #{$color};
+    -o-box-shadow: #{$inset-value} #{$x} #{$y} #{$blur} #{$spread} #{$color};
+    box-shadow: #{$inset-value} #{$x} #{$y} #{$blur} #{$spread} #{$color};
+}
+
+@mixin position($position: absolute, $top: auto, $right: auto, $bottom: auto, $left: auto) {
+    position: $position;
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+}
+
+@mixin elastic-scroll() {
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
