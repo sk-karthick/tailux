@@ -2,9 +2,6 @@
 @use './styles/variables.scss' as *;
 @use './styles/common.scss' as *;
 
-@use './components/layout/Navbar.scss' as *;
-@use './components//layout/Footer.scss' as *;
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -29,16 +26,4 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-}
-
-.page-container {
-  width: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  height: calc(99vh - 4.7rem);
-  position: relative;
-
-  @media (max-width: 40rem) {
-    height: calc(99vh - 8.2rem);
-  }
 }
