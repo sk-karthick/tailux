@@ -50,7 +50,7 @@ export default function Home() {
 
   return (
     <>
-      <Navbar setSearchValue={setSearchValue}/>
+      <Navbar setSearchValue={setSearchValue} setIsUser={setIsUser}/>
       {isUser && <Login setIsUser={setIsUser}/>}
       <ProductPage searchValue={searchValue}/>
     </>

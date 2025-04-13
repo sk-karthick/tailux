@@ -37,6 +37,8 @@ async function getProduct(id: string) {
 
     return res.json();
 }
+
+
 export default async function ProductPage({
     params,
 }: {

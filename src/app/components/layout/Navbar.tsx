@@ -16,6 +16,7 @@ import Image from "next/image";
 
 interface Navbarprops {
     setSearchValue: (value: string) => void;
+    setIsUser: (isOpen: boolean) => void;
 }
 
 
@@ -34,7 +35,7 @@ interface Product {
 
 const Navbar: React.FC<Navbarprops> = (props) => {
     const [user, setUser] = useState<UserType>({});
-    const { setSearchValue } = props
+    const { setSearchValue, setIsUser } = props
     const [step, setStep] = useState(0);
     const likedProductIds = useSelector((state: RootState) => state.liked.likedProducts);
     const [likedProducts, setLikedProducts] = useState<Product[]>([]);
@@ -79,6 +80,7 @@ const Navbar: React.FC<Navbarprops> = (props) => {
         localStorage.removeItem("token");
         localStorage.removeItem("refresh_token");
         setUser({});
+        setIsUser(true);
         setStep(0);
     }
 
