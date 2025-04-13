@@ -14,10 +14,10 @@ const Login: React.FC<LoginProps> = ({ setIsUser }) => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const { fetchData } = useFetch();
+    const { login } = useFetch();
 
     const handleSaveClick = async () => {
-        await fetchData({
+        await login({
             email,
             password,
             setLoading,

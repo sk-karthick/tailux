@@ -1,4 +1,6 @@
-// app/products/[id]/page.tsx
+export const dynamic = "error";
+export const dynamicParams = false;
+
 import ProductDetails from "@/app/components/layout/ProductDetails";
 import { notFound } from "next/navigation";
 
@@ -15,7 +17,6 @@ type Product = {
     };
 };
 
-
 export async function generateStaticParams() {
     const res = await fetch("https://fakestoreapi.com/products");
     const products: Product[] = await res.json();
@@ -25,21 +26,35 @@ export async function generateStaticParams() {
     }));
 }
 
-export default async function ProductPage({ params }: { params: { id: string } }) {
+async function getProduct(id: string) {
+    const res = await fetch(`https://fakestoreapi.com/products/${id}`, {
+        next: { revalidate: 60 },
+    });
+
+    if (!res.ok) {
+        throw new Error("Failed to fetch product");
+    }
+
+    return res.json();
+}
+export default async function ProductPage({
+    params,
+}: {
+    params: Promise<{ id: string }>;
+}) {
+    const { id } = await params;
+    const productId = parseInt(id, 10);
+
+    if (isNaN(productId)) {
+        notFound();
+    }
+
     try {
-        const res = await fetch(`https://fakestoreapi.com/products/${params.id}`, {
-            next: { revalidate: 60 },
-        });
-
-        const product = await res.json();
-
-        if (!product || !product.id) {
-            notFound();
-        }
-
+        const product = await getProduct(id);
+        if (!product?.id) notFound();
         return <ProductDetails product={product} />;
     } catch (error) {
-        console.log("Error fetching product details:", error);
+        console.error("Error fetching product:", error);
         notFound();
     }
 }
