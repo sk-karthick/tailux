@@ -1,42 +1,163 @@
-"use client"
-import { useState } from "react"
-import Link from "next/link"
-// import { Menu, X } from "lucide-react" // optional icons (install lucide-react)
+import { Bell, Heart, ShoppingCart } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import useUserFetch from "../hooks/useUserFetch";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
+import CartSection from "./CartSection";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/store/store";
 
-export default function Navbar() {
-    const [isOpen, setIsOpen] = useState(false)
+interface Navbarprops {
+    setSearchValue: (value: string) => void;
+}
+
+
+interface UserType {
+    name?: string;
+    email?: string;
+    avatar?: string;
+}
+interface Product {
+    id: number;
+    title: string;
+    description: string;
+    price: number;
+    image: string;
+}
+
+const Navbar: React.FC<Navbarprops> = (props) => {
+    const [user, setUser] = useState<UserType>({});
+    const { setSearchValue } = props
+    const [step, setStep] = useState(0);
+    const likedProductIds = useSelector((state: RootState) => state.liked.likedProducts);
+    const [likedProducts, setLikedProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    useUserFetch({ setUser });
+
+    useEffect(() => {
+        const fetchLikedProducts = async () => {
+            setLoading(true);
+            try {
+                const allProductsRes = await fetch("https://fakestoreapi.com/products");
+                const allProducts: Product[] = await allProductsRes.json();
+
+                const filtered = allProducts.filter((product) =>
+                    likedProductIds.includes(product.id)
+                );
+
+                setLikedProducts(filtered);
+            } catch (err) {
+                console.error("Error fetching liked products", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (likedProductIds.length > 0) {
+            fetchLikedProducts();
+        } else {
+            setLikedProducts([]);
+        }
+    }, [likedProductIds]);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setStep(1);
+        }, 3000);
+
+        return () => clearTimeout(timeout);
+    }, []);
+
+    const actionLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("refresh_token");
+        setUser({});
+        setStep(0);
+    }
+
+    const ProfileView = () => {
+        return (
+            <>
+                <div className="flex items-center gap-2">
+                    <Avatar>
+                        <AvatarImage src="/profile.jpg" alt="User" />
+                        <AvatarFallback onClick={ProfileView}>
+                            {user?.avatar ? (
+                                <img src={user?.avatar} alt="user-avatar" />
+                            ) : user?.name?.charAt(0)}
+                        </AvatarFallback>
+                    </Avatar>
+                    <div>
+                        <p className="text-sm font-semibold">{user.name}</p>
+                        <p className="text-xs text-gray-500">{user.email}</p>
+                    </div>
+                </div>
+                <div className="flex align-center justify-between mt-4">
+                    <Button variant="secondary">
+                        Edit Profile
+                    </Button>
+                    <Button variant="destructive" onClick={actionLogout}>
+                        Logout
+                    </Button>
+                </div>
+            </>
+        )
+    }
 
     return (
-        <nav className="bg-white shadow-md sticky top-0 z-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16 items-center">
-                    <div className="text-2xl font-bold text-blue-600">
-                        <Link href="/">Tailux</Link>
-                    </div>
-
-                    <div className="hidden md:flex space-x-6">
-                        <Link href="/" className="text-gray-700 hover:text-blue-600">Home</Link>
-                        <Link href="/about" className="text-gray-700 hover:text-blue-600">About</Link>
-                        <Link href="/services" className="text-gray-700 hover:text-blue-600">Services</Link>
-                        <Link href="/contact" className="text-gray-700 hover:text-blue-600">Contact</Link>
-                    </div>
-
-                    <div className="md:hidden">
-                        <button onClick={() => setIsOpen(!isOpen)} className="text-gray-700 hover:text-blue-600">
-                            {/* {isOpen ? <X size={24} /> : <Menu size={24} />} */}
-                        </button>
-                    </div>
-                </div>
+        <>
+            <div className="branding-name bg-[#390007] text-white h-8 py-2 text-xl flex items-center justify-center">
+                TAILUX
             </div>
+            <nav className="w-full px-4 py-2 border-b bg-white flex items-center justify-between">
+                <Popover>
+                    <PopoverTrigger>
+                        <div className="flex items-center gap-2 cursor-pointer">
+                            <Avatar>
+                                <AvatarImage src={user?.avatar || "/profile.jpg"} alt="User-profile" />
+                                <AvatarFallback>
+                                    {user?.name ? user.name.charAt(0) : "U"}
+                                </AvatarFallback>
+                            </Avatar>
+                            <div className="transition-all duration-700 ease-in-out">
+                                {step === 0 ? (
+                                    <p className="animate-fade-in">Welcome back! ✨</p>
+                                ) : (
+                                    <p className="animate-fade-in">{user.name}</p>
+                                )}
+                            </div>
+                        </div>
+                        <PopoverContent className="w-[30svh] p-4">
+                            {ProfileView()}
+                        </PopoverContent>
 
-            {isOpen && (
-                <div className="md:hidden px-4 pb-4">
-                    <Link href="/" className="block py-2 text-gray-700 hover:text-blue-600">Home</Link>
-                    <Link href="/about" className="block py-2 text-gray-700 hover:text-blue-600">About</Link>
-                    <Link href="/services" className="block py-2 text-gray-700 hover:text-blue-600">Services</Link>
-                    <Link href="/contact" className="block py-2 text-gray-700 hover:text-blue-600">Contact</Link>
+                    </PopoverTrigger>
+                </Popover>
+                <div className="flex-1 px-4 max-w-md">
+                    <Input
+                        type="text"
+                        placeholder="Search products or orders"
+                        className="w-full rounded-full px-5 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        onChange={(e) => setSearchValue(e.target.value)}
+                    />
                 </div>
-            )}
-        </nav>
+
+                <div className="flex items-center gap-4">
+                    <Button variant="ghost" size="icon" className="relative">
+                        <Bell className="w-[40px] h-[40px]" />
+                        <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500 animate-ping" />
+                        <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" />
+                    </Button>
+                    <CartSection cartItems={likedProducts} />
+                </div>
+            </nav>
+        </>
     )
 }
+export default Navbar;
