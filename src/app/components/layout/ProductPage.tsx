@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface Product {
@@ -32,7 +31,8 @@ const ProductPage: React.FC<ProductPageProps> = (props) => {
             setProducts(json);
             setFiltered(json);
         } catch (err) {
-            setError("Failed to load products. Please try again.");
+            console.error("Error fetching products", err);
+            setError("Failed to load products. Please try again.",);
         } finally {
             setLoading(false);
         }
@@ -42,6 +42,7 @@ const ProductPage: React.FC<ProductPageProps> = (props) => {
         fetchProducts();
     }, []);
 
+    console.log("searchValue", searchValue);
     useEffect(() => {
         if (searchValue) {
             setSearch(searchValue);

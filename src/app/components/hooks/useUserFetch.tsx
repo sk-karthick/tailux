@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react';
 
 interface UserType {
     name?: string;
@@ -6,11 +6,11 @@ interface UserType {
     avatar?: string;
 }
 
-interface UseFetchUserProfileProps {
-    setUser: (user: any) => void;
+interface UseUserFetchProps {
+    setUser: (user: UserType) => void;
 }
 
-const useUserFetch: React.FC<UseFetchUserProfileProps> = ({ setUser }) => {
+const useUserFetch = ({ setUser }: UseUserFetchProps) => {
     useEffect(() => {   
         const fetchUser = async () => {
             const token = localStorage.getItem("token");
@@ -32,10 +32,6 @@ const useUserFetch: React.FC<UseFetchUserProfileProps> = ({ setUser }) => {
 
         fetchUser();
     }, [setUser]);
-
-    return (
-        <div>useUserFetch</div>
-    )
 }
 
-export default useUserFetch
+export default useUserFetch;

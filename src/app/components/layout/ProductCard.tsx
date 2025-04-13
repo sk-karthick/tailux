@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
 import { toggleLike } from "@/app/store/likedSlice";
 import { toast } from "sonner";
+import Image from "next/image";
 
 type ProductProps = {
     image: string;
@@ -38,7 +39,7 @@ export default function ProductCard({
     const handleLikeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
         dispatch(toggleLike(id));
-        toast.custom((t) => (
+        toast.custom(() => (
             <div className={`dark:bg-zinc-900 p-4 rounded-md shadow-md w-full max-w-sm ${!isLiked ? "bg-[#5E3023]" : "bg-[#5E6067]"}`} role="alert">
                 <div className="text-sm font-medium mb-1 text-white">
                     {!isLiked ? "Added to liked products" : "Removed from liked products"}
@@ -56,8 +57,10 @@ export default function ProductCard({
             className="w-full max-w-sm overflow-hidden cursor-pointer rounded-2xl shadow-sm border transition hover:shadow-md hover:scale-[1.02] duration-200"
         >
             <div className="relative group">
-                <img
+                <Image
                     src={image}
+                    width={500}
+                    height={300}
                     alt={title}
                     className="w-full h-56 object-cover rounded-t-2xl transition-transform duration-200 group-hover:scale-105"
                 />

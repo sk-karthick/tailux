@@ -12,6 +12,7 @@ import {
 import CartSection from "./CartSection";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
+import Image from "next/image";
 
 interface Navbarprops {
     setSearchValue: (value: string) => void;
@@ -89,7 +90,7 @@ const Navbar: React.FC<Navbarprops> = (props) => {
                         <AvatarImage src="/profile.jpg" alt="User" />
                         <AvatarFallback onClick={ProfileView}>
                             {user?.avatar ? (
-                                <img src={user?.avatar} alt="user-avatar" />
+                                <Image width={100} height={100} src={user?.avatar} alt="user-avatar" />
                             ) : user?.name?.charAt(0)}
                         </AvatarFallback>
                     </Avatar>
