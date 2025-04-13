@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Dialog } from "@radix-ui/react-dialog";
 import DialogModal from "../ui/Dialog";
-import { useFetch } from '../hooks/useLoginFetch';  
+import { useFetch } from '../hooks/useLoginFetch';
 
 interface LoginProps {
     setIsUser: (isOpen: boolean) => void;
@@ -14,7 +14,7 @@ const Login: React.FC<LoginProps> = ({ setIsUser }) => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const { login } = useFetch();
+    const { login } = useFetch(); // Only 'login' is available from this hook
 
     const handleSaveClick = async () => {
         await login({
@@ -62,7 +62,6 @@ const Login: React.FC<LoginProps> = ({ setIsUser }) => {
                 dialogHeader="Login"
                 dialogDescription={renderDialogContent()}
                 confirmText={loading ? "Logging in..." : "Login"}
-                confirmDisabled={loading}
             />
         </Dialog>
     );
