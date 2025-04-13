@@ -4,11 +4,13 @@ interface UserType {
     name?: string;
     email?: string;
     avatar?: string;
+}
+
+interface UseFetchUserProfileProps {
     setUser: (user: any) => void;
 }
 
-const useUserFetch: React.FC<UserType> = (props) => {
-    const { setUser } = props;
+const useUserFetch: React.FC<UseFetchUserProfileProps> = ({ setUser }) => {
     useEffect(() => {   
         const fetchUser = async () => {
             const token = localStorage.getItem("token");
@@ -29,7 +31,8 @@ const useUserFetch: React.FC<UserType> = (props) => {
         };
 
         fetchUser();
-    }, []);
+    }, [setUser]);
+
     return (
         <div>useUserFetch</div>
     )

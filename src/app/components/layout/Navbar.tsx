@@ -1,4 +1,4 @@
-import { Bell, Heart, ShoppingCart } from "lucide-react";
+import { Bell} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -37,12 +37,12 @@ const Navbar: React.FC<Navbarprops> = (props) => {
     const [step, setStep] = useState(0);
     const likedProductIds = useSelector((state: RootState) => state.liked.likedProducts);
     const [likedProducts, setLikedProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    // const [loading, setLoading] = useState<boolean>(false);
     useUserFetch({ setUser });
 
     useEffect(() => {
         const fetchLikedProducts = async () => {
-            setLoading(true);
+            // setLoading(true);
             try {
                 const allProductsRes = await fetch("https://fakestoreapi.com/products");
                 const allProducts: Product[] = await allProductsRes.json();
@@ -55,7 +55,7 @@ const Navbar: React.FC<Navbarprops> = (props) => {
             } catch (err) {
                 console.error("Error fetching liked products", err);
             } finally {
-                setLoading(false);
+                // setLoading(false);
             }
         };
 
@@ -154,7 +154,11 @@ const Navbar: React.FC<Navbarprops> = (props) => {
                         <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500 animate-ping" />
                         <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" />
                     </Button>
-                    <CartSection cartItems={likedProducts} />
+                    <CartSection cartItems={likedProducts.map(product => ({
+                        ...product,
+                        name: product.title, 
+                        quantity: 1 
+                    }))} />
                 </div>
             </nav>
         </>

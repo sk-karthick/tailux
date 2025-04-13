@@ -1,13 +1,26 @@
 // app/products/[id]/page.tsx
 import ProductDetails from "@/app/components/layout/ProductDetails";
-import { Metadata } from "next";
 import { notFound } from "next/navigation";
+
+type Product = {
+    id: number;
+    title: string;
+    price: number;
+    description: string;
+    category: string;
+    image: string;
+    rating: {
+        rate: number;
+        count: number;
+    };
+};
+
 
 export async function generateStaticParams() {
     const res = await fetch("https://fakestoreapi.com/products");
-    const products = await res.json();
+    const products: Product[] = await res.json();
 
-    return products.map((product: any) => ({
+    return products.map((product) => ({
         id: product.id.toString(),
     }));
 }
@@ -26,6 +39,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
         return <ProductDetails product={product} />;
     } catch (error) {
+        console.log("Error fetching product details:", error);
         notFound();
     }
 }

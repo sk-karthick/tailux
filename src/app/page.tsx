@@ -37,7 +37,8 @@ export default function Home() {
           localStorage.removeItem("refresh_token");
           setIsUser(true);
         }
-      } catch (err) {
+      } catch (error) {
+        console.log("Token is invalid or expired", error);
         localStorage.removeItem("token");
         localStorage.removeItem("refresh_token");
         setIsUser(true);

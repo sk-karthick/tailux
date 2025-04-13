@@ -12,7 +12,14 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 
-const CartSection = ({ cartItems }: { cartItems: any[] }) => {
+interface CartItem {
+    image: string;
+    name: string;
+    quantity: number;
+    price: number;
+}
+
+const CartSection = ({ cartItems }: { cartItems: CartItem[] }) => {
     return (
         <Dialog>
             <DialogTrigger asChild>
