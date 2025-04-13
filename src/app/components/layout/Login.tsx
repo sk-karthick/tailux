@@ -14,7 +14,7 @@ const Login: React.FC<LoginProps> = ({ setIsUser }) => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const { login } = useFetch(); // Only 'login' is available from this hook
+    const { login } = useFetch();
 
     const handleSaveClick = async () => {
         await login({

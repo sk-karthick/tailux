@@ -35,8 +35,9 @@ const useFetch = () => {
 
       localStorage.setItem("token", data.access_token);
       localStorage.setItem("refresh_token", data.refresh_token);
-      setIsUser(true);
+      setIsUser(false);
       router.push("/");
+      window.location.reload();
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message || "Login failed");
@@ -88,7 +89,7 @@ const refreshAuthToken = async () => {
 const logout = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("refresh_token");
-  window.location.href = "/login"; 
+  window.location.href = "/"; 
 };
 
 export { useFetch, refreshAuthToken, logout };

@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
         hostname: "fakestoreapi.com",
       },
     ],
+    domains: ['images.pexels.com'],
   },
 };
 
