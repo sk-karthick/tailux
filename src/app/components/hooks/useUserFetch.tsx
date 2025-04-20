@@ -1,37 +1,63 @@
-import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { RootState } from '@/app/store/store';
+import { refreshAuthToken } from '@/app/auth/auth';
+import { setUser } from '@/app/store/userSlice';
 
-interface UserType {
-    name?: string;
-    email?: string;
-    avatar?: string;
-}
+const useUserFetch = () => {
+    const dispatch = useDispatch();
+    const [user, setUserState] = useState<any>();
+    const [error, setError] = useState<string | null>(null);
 
-interface UseUserFetchProps {
-    setUser: (user: UserType) => void;
-}
-
-const useUserFetch = ({ setUser }: UseUserFetchProps) => {
-    useEffect(() => {   
+    useEffect(() => {
         const fetchUser = async () => {
-            const token = localStorage.getItem("token");
-            if (!token) return;
+            let token = localStorage.getItem("token");
+
+            if (!token) {
+                setError("No token found");
+                return;
+            }
 
             try {
-                const res = await fetch("https://api.escuelajs.co/api/v1/auth/profile", {
+                let res = await fetch("https://dummyjson.com/auth/me", {
+                    method: "GET",
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
 
+                if (res.status === 401) {
+                    token = await refreshAuthToken();
+                    if (!token) {
+                        throw new Error("Unauthorized");
+                    }
+                    res = await fetch("https://dummyjson.com/auth/me", {
+                        method: "GET",
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                }
+
                 const data = await res.json();
-                setUser(data);
-            } catch (err) {
-                console.error("Failed to fetch user profile", err);
+                console.log("User data:", data);
+
+                if (!res.ok) {
+                    throw new Error(data.message || "Failed to fetch user");
+                }
+
+                dispatch(setUser(data));
+                setUserState(data);
+            } catch (err: any) {
+                setError(err.message || "Failed to fetch user");
+                console.error("Fetch user error:", err);
             }
         };
 
         fetchUser();
-    }, [setUser]);
-}
+    }, [dispatch]);
+
+    return { user, error };
+};
 
 export default useUserFetch;

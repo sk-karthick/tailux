@@ -1,4 +1,4 @@
-import { Bell} from "lucide-react";
+import { Bell } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,8 @@ import CartSection from "./CartSection";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { logout } from "@/app/auth/auth";
 
 interface Navbarprops {
     setSearchValue: (value: string) => void;
@@ -34,13 +36,22 @@ interface Product {
 }
 
 const Navbar: React.FC<Navbarprops> = (props) => {
-    const [user, setUser] = useState<UserType>({});
+    // const [user, setUser] = useState<UserType>({});
     const { setSearchValue, setIsUser } = props
     const [step, setStep] = useState(0);
     const likedProductIds = useSelector((state: RootState) => state.liked.likedProducts);
     const [likedProducts, setLikedProducts] = useState<Product[]>([]);
-    // const [loading, setLoading] = useState<boolean>(false);
-    useUserFetch({ setUser });
+
+    const user = useSelector((state: RootState) => state.user.user);
+    const getUser = useUserFetch();
+    console.log(user, getUser)
+    useEffect(() => {
+        if (user) {
+            console.log("User info in navbar:", user);
+        } else {
+            console.log("No user info available");
+        }
+    }, [user]);
 
     useEffect(() => {
         const fetchLikedProducts = async () => {
@@ -77,11 +88,8 @@ const Navbar: React.FC<Navbarprops> = (props) => {
     }, []);
 
     const actionLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("refresh_token");
-        setUser({});
-        setIsUser(true);
-        setStep(0);
+        logout();
+        setIsUser(false);
     }
 
     const ProfileView = () => {
@@ -91,14 +99,14 @@ const Navbar: React.FC<Navbarprops> = (props) => {
                     <Avatar>
                         <AvatarImage src="/profile.jpg" alt="User" />
                         <AvatarFallback onClick={ProfileView}>
-                            {user?.avatar ? (
-                                <Image width={100} height={100} src={user?.avatar} alt="user-avatar" />
-                            ) : user?.name?.charAt(0)}
+                            {user?.image ? (
+                                <Image width={100} height={100} src={user?.image} alt="user-avatar" />
+                            ) : user?.firstName?.charAt(0)}
                         </AvatarFallback>
                     </Avatar>
                     <div>
-                        <p className="text-sm font-semibold">{user.name}</p>
-                        <p className="text-xs text-gray-500">{user.email}</p>
+                        <p className="text-sm font-semibold">{user?.firstName}</p>
+                        <p className="text-xs text-gray-500">{user?.email}</p>
                     </div>
                 </div>
                 <div className="flex align-center justify-between mt-4">
@@ -123,16 +131,16 @@ const Navbar: React.FC<Navbarprops> = (props) => {
                     <PopoverTrigger>
                         <div className="flex items-center gap-2 cursor-pointer">
                             <Avatar>
-                                <AvatarImage src={user?.avatar || "/profile.jpg"} alt="User-profile" />
+                                <AvatarImage src={user?.image || "/profile.jpg"} alt="User-profile" />
                                 <AvatarFallback>
-                                    {user?.name ? user.name.charAt(0) : "U"}
+                                    {user?.firstName ? user.firstName.charAt(0) : "U"}
                                 </AvatarFallback>
                             </Avatar>
                             <div className="transition-all duration-700 ease-in-out">
                                 {step === 0 ? (
                                     <p className="animate-fade-in">Welcome back! ✨</p>
                                 ) : (
-                                    <p className="animate-fade-in">{user.name}</p>
+                                        <p className="animate-fade-in">{user?.firstName && user.firstName}</p>
                                 )}
                             </div>
                         </div>
@@ -159,8 +167,8 @@ const Navbar: React.FC<Navbarprops> = (props) => {
                     </Button>
                     <CartSection cartItems={likedProducts.map(product => ({
                         ...product,
-                        name: product.title, 
-                        quantity: 1 
+                        name: product.title,
+                        quantity: 1
                     }))} />
                 </div>
             </nav>

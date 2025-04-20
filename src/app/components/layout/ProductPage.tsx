@@ -8,7 +8,7 @@ interface Product {
     title: string;
     description: string;
     price: number;
-    image: string;
+    image: string[];
 }
 
 interface ProductPageProps {
@@ -24,9 +24,9 @@ const ProductPage: React.FC<ProductPageProps> = ({ searchValue = "" }) => {
         try {
             setLoading(true);
             setError("");
-            const res = await fetch("https://fakestoreapi.com/products");
-            const json: Product[] = await res.json();
-            setProducts(json);
+            const res = await fetch("https://dummyjson.com/products");
+            const json = await res.json();
+            setProducts(json.products);
         } catch (err) {
             console.error("Error fetching products", err);
             setError("Failed to load products. Please try again.");
@@ -39,7 +39,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ searchValue = "" }) => {
         fetchProducts();
     }, []);
 
-    // Use useMemo for filtered products to optimize performance
+
     const filteredProducts = useMemo(() => {
         if (!searchValue) return products;
         return products.filter(product =>
@@ -63,7 +63,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ searchValue = "" }) => {
                         <ProductCard
                             key={product.id}
                             id={product.id}
-                            image={product.image}
+                            image={product.images[0]}
                             title={product.title}
                             description={product.description}
                             price={product.price}

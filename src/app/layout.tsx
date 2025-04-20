@@ -37,8 +37,8 @@ export default function RootLayout({
         </Head>
         <body className="bg-background text-foreground min-h-screen antialiased">
           {children}
-          <SpeedInsights 
-            
+          <SpeedInsights
+
           />
           <Toaster position="bottom-left" closeButton />
         </body>

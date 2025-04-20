@@ -54,7 +54,7 @@ export default function ProductCard({
     return (
         <Card
             onClick={handleCardClick}
-            className="w-full max-w-sm overflow-hidden cursor-pointer rounded-2xl shadow-sm border transition hover:shadow-md hover:scale-[1.02] duration-200"
+            className="w-full max-w-sm overflow-hidden cursor-pointer rounded-2xl shadow-sm border transition hover:shadow-md hover:scale-[1.02] duration-500"
         >
             <div className="relative group">
                 <Image
@@ -62,17 +62,17 @@ export default function ProductCard({
                     width={500}
                     height={300}
                     alt={title}
-                    className="w-full h-56 object-cover rounded-t-2xl transition-transform duration-200 group-hover:scale-105"
+                    className="w-full h-[300px] object-contain"
                 />
 
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="absolute top-3 right-3 bg-white/80 backdrop-blur-md rounded-full shadow-sm z-10"
+                    className="text-2xl absolute top-3 right-3 bg-white/80 backdrop-blur-md rounded-full shadow-sm z-10"
                     onClick={handleLikeClick}
                 >
-                    <Heart
-                        className={`w-5 h-5 transition ${isLiked ? "fill-red-500 text-red-500" : "text-gray-500"}`}
+                    <Heart width={30} height={30}
+                        className={` transition ${isLiked ? "fill-red-500 text-red-500" : "text-gray-500"}`}
                     />
                 </Button>
             </div>
