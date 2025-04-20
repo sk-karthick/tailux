@@ -7,19 +7,19 @@ import { getLikedProductsFromCookies } from "./lib/cookies";
 import { setLikes } from "./store/likedSlice";
 import { useDispatch } from "react-redux";
 import useAuth from "./components/hooks/useAuth";
+import useAuthRehydrate from "./components/hooks/useAuthRehydrate";
 
 export default function Home() {
 
   const { isAuthenticated, setIsAuthenticated } = useAuth();
   const [searchValue, setSearchValue] = useState('');
   const dispatch = useDispatch();
+  useAuthRehydrate();
 
   useEffect(() => {
     const liked = getLikedProductsFromCookies();
     dispatch(setLikes(liked));
   }, []);
-
-  // if (loading) return  <div>Loading...</div>;
 
   return (
     <>

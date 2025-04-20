@@ -1,63 +1,62 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { setUser } from "../store/userSlice";
+import { setUser, resetUser } from "../store/userSlice";
 
 
 interface LoginArgs {
-    email: string;
-    password: string;
-    setLoading: (loading: boolean) => void;
-    setError: (error: string) => void;
-    setIsUser: Dispatch<SetStateAction<boolean>>;
+  email: string;
+  password: string;
+  setLoading: (loading: boolean) => void;
+  setError: (error: string) => void;
+  setIsUser: Dispatch<SetStateAction<boolean>>;
 }
 
 const useFetch = () => {
   const dispatch = useDispatch();
-    const login = async ({
-        email,
-        password,
-        setLoading,
-        setError,
-        setIsUser,
-    }: LoginArgs) => {
-        setLoading(true);
-        setError("");
+  const login = async ({
+    email,
+    password,
+    setLoading,
+    setError,
+    setIsUser,
+  }: LoginArgs) => {
+    setLoading(true);
+    setError("");
 
-        try {
-            const res = await fetch("https://dummyjson.com/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    username: email, // use "username" for DummyJSON
-                    password,
-                }),
-            });
+    try {
+      const res = await fetch("https://dummyjson.com/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: email, // use "username" for DummyJSON
+          password,
+        }),
+      });
 
-            const data = await res.json();
+      const data = await res.json();
 
-            if (!res.ok) {
-                throw new Error(data.message || "Login failed");
-            }
+      if (!res.ok) {
+        throw new Error(data.message || "Login failed");
+      }
 
-            localStorage.setItem("token", data.accessToken);
-            localStorage.setItem("refresh_token", data.refreshToken);
+      localStorage.setItem("token", data.accessToken);
+      localStorage.setItem("refresh_token", data.refreshToken);
+      localStorage.setItem("user", JSON.stringify(data));
+      dispatch(setUser(data));
+      setIsUser(true);
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Login error:", err.message);
+        setError(err.message);
+      } else {
+        setError("Login failed");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            console.log("Login success:", data);
-            dispatch(setUser(data)); 
-            setIsUser(true);
-        } catch (err) {
-            if (err instanceof Error) {
-                console.error("Login error:", err.message);
-                setError(err.message);
-            } else {
-                setError("Login failed");
-            }
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return { login };
+  return { login };
 };
 
 
@@ -69,7 +68,7 @@ const refreshAuthToken = async () => {
   }
 
   try {
-      const res = await fetch('https://dummyjson.com/auth/refresh', {
+    const res = await fetch('https://dummyjson.com/auth/refresh', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refresh_token: refreshToken }),
@@ -82,7 +81,7 @@ const refreshAuthToken = async () => {
     }
 
     localStorage.setItem("token", data.access_token);
-    localStorage.setItem("refresh_token", data.refresh_token);
+    localStorage.setItem("refresh_token", data.refresh_token);  
 
     return data.access_token;
   } catch (err) {
@@ -95,10 +94,16 @@ const refreshAuthToken = async () => {
   }
 };
 
-const logout = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("refresh_token");
-  window.location.href = "/";
+const useLogout = () => {
+  const dispatch = useDispatch();
+
+  const logout = useCallback(() => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refresh_token");
+    dispatch(resetUser());
+
+  }, [dispatch]);
+  return logout;
 };
 
-export { useFetch, refreshAuthToken, logout };
+export { useFetch, refreshAuthToken, useLogout };

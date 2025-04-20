@@ -1,44 +1,15 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import ProductCard from "./ProductCard";
 import { Skeleton } from "@/components/ui/skeleton";
-
-interface Product {
-    id: number;
-    title: string;
-    description: string;
-    price: number;
-    image: string[];
-}
+import { useProducts } from "../hooks/useProducts";
 
 interface ProductPageProps {
     searchValue?: string;
 }
 
 const ProductPage: React.FC<ProductPageProps> = ({ searchValue = "" }) => {
-    const [products, setProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string>("");
-
-    const fetchProducts = async () => {
-        try {
-            setLoading(true);
-            setError("");
-            const res = await fetch("https://dummyjson.com/products");
-            const json = await res.json();
-            setProducts(json.products);
-        } catch (err) {
-            console.error("Error fetching products", err);
-            setError("Failed to load products. Please try again.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchProducts();
-    }, []);
-
+    const { products, loading, error } = useProducts();
 
     const filteredProducts = useMemo(() => {
         if (!searchValue) return products;

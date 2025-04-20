@@ -1,6 +1,5 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { RootState } from '@/app/store/store';
 import { refreshAuthToken } from '@/app/auth/auth';
 import { setUser } from '@/app/store/userSlice';
 
@@ -40,7 +39,6 @@ const useUserFetch = () => {
                 }
 
                 const data = await res.json();
-                console.log("User data:", data);
 
                 if (!res.ok) {
                     throw new Error(data.message || "Failed to fetch user");

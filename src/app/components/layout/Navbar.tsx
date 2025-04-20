@@ -13,8 +13,7 @@ import CartSection from "./CartSection";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { logout } from "@/app/auth/auth";
+import { useLogout } from "@/app/auth/auth";
 
 interface Navbarprops {
     setSearchValue: (value: string) => void;
@@ -22,11 +21,6 @@ interface Navbarprops {
 }
 
 
-interface UserType {
-    name?: string;
-    email?: string;
-    avatar?: string;
-}
 interface Product {
     id: number;
     title: string;
@@ -36,48 +30,13 @@ interface Product {
 }
 
 const Navbar: React.FC<Navbarprops> = (props) => {
-    // const [user, setUser] = useState<UserType>({});
     const { setSearchValue, setIsUser } = props
+
+    const logout = useLogout();
     const [step, setStep] = useState(0);
-    const likedProductIds = useSelector((state: RootState) => state.liked.likedProducts);
     const [likedProducts, setLikedProducts] = useState<Product[]>([]);
 
     const user = useSelector((state: RootState) => state.user.user);
-    const getUser = useUserFetch();
-    console.log(user, getUser)
-    useEffect(() => {
-        if (user) {
-            console.log("User info in navbar:", user);
-        } else {
-            console.log("No user info available");
-        }
-    }, [user]);
-
-    useEffect(() => {
-        const fetchLikedProducts = async () => {
-            // setLoading(true);
-            try {
-                const allProductsRes = await fetch("https://fakestoreapi.com/products");
-                const allProducts: Product[] = await allProductsRes.json();
-
-                const filtered = allProducts.filter((product) =>
-                    likedProductIds.includes(product.id)
-                );
-
-                setLikedProducts(filtered);
-            } catch (err) {
-                console.error("Error fetching liked products", err);
-            } finally {
-                // setLoading(false);
-            }
-        };
-
-        if (likedProductIds.length > 0) {
-            fetchLikedProducts();
-        } else {
-            setLikedProducts([]);
-        }
-    }, [likedProductIds]);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -88,7 +47,7 @@ const Navbar: React.FC<Navbarprops> = (props) => {
     }, []);
 
     const actionLogout = () => {
-        logout();
+        logout()
         setIsUser(false);
     }
 
@@ -140,11 +99,11 @@ const Navbar: React.FC<Navbarprops> = (props) => {
                                 {step === 0 ? (
                                     <p className="animate-fade-in">Welcome back! ✨</p>
                                 ) : (
-                                        <p className="animate-fade-in">{user?.firstName && user.firstName}</p>
+                                    <p className="animate-fade-in">{user?.firstName && user.firstName}</p>
                                 )}
                             </div>
                         </div>
-                        <PopoverContent className="w-[30svh] p-4">
+                        <PopoverContent className="w-[35svh] p-4 ml-4">
                             {ProfileView()}
                         </PopoverContent>
 
@@ -165,11 +124,11 @@ const Navbar: React.FC<Navbarprops> = (props) => {
                         <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500 animate-ping" />
                         <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" />
                     </Button>
-                    <CartSection cartItems={likedProducts.map(product => ({
+                    {/* <CartSection cartItems={likedProducts.map(product => ({
                         ...product,
                         name: product.title,
                         quantity: 1
-                    }))} />
+                    }))} /> */}
                 </div>
             </nav>
         </>
