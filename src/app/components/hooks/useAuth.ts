@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 
+
+interface DecodedToken {
+    exp: number;
+}
+
 const useAuth = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -15,7 +20,7 @@ const useAuth = () => {
             }
 
             try {
-                const decoded: any = jwtDecode(token);
+                const decoded = jwtDecode<DecodedToken>(token);
                 const now = Date.now() / 1000;
 
                 if (decoded.exp && decoded.exp > now) {

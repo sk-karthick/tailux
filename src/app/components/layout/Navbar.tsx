@@ -3,13 +3,11 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import useUserFetch from "../hooks/useUserFetch";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import CartSection from "./CartSection";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
 import Image from "next/image";
@@ -20,22 +18,11 @@ interface Navbarprops {
     setIsUser: (isOpen: boolean) => void;
 }
 
-
-interface Product {
-    id: number;
-    title: string;
-    description: string;
-    price: number;
-    image: string;
-}
-
 const Navbar: React.FC<Navbarprops> = (props) => {
     const { setSearchValue, setIsUser } = props
 
     const logout = useLogout();
     const [step, setStep] = useState(0);
-    const [likedProducts, setLikedProducts] = useState<Product[]>([]);
-
     const user = useSelector((state: RootState) => state.user.user);
 
     useEffect(() => {

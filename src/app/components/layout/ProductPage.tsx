@@ -33,12 +33,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ searchValue = "" }) => {
                     : filteredProducts.map((product) => (
                         <ProductCard
                             key={product.id}
-                            id={product.id}
-                            image={product.images[0]}
-                            title={product.title}
-                            description={product.description}
-                            price={product.price}
-                            discount={3}
+                            products={product}
                         />
                     ))}
             </div>

@@ -5,7 +5,7 @@ import { setUser } from '@/app/store/userSlice';
 
 const useUserFetch = () => {
     const dispatch = useDispatch();
-    const [user, setUserState] = useState<any>();
+    const [user, setUserState] = useState();
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -46,9 +46,13 @@ const useUserFetch = () => {
 
                 dispatch(setUser(data));
                 setUserState(data);
-            } catch (err: any) {
-                setError(err.message || "Failed to fetch user");
-                console.error("Fetch user error:", err);
+            } catch (err: unknown) {
+                if (err instanceof Error) {
+                    setError(err.message || "Failed to fetch user");
+                    console.error("Fetch user error:", err);
+                } else {
+                    setError("An unknown error occurred");
+                }
             }
         };
 

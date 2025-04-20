@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
-
-export interface Product {
-    id: number;
-    title: string;
-    description: string;
-    price: number;
-    images: string[];
-}
+import { Product } from '@/types/product';
 
 interface ProductAPIResponse {
     products: Product[];

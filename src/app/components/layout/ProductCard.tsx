@@ -8,44 +8,33 @@ import { toggleLike } from "@/app/store/likedSlice";
 import { toast } from "sonner";
 import Image from "next/image";
 
-type ProductProps = {
-    image: string;
-    title: string;
-    description: string;
-    price: number;
-    discount: number;
-    id: number;
-};
+import { Product } from '@/types/product';
 
-export default function ProductCard({
-    image,
-    title,
-    description,
-    price,
-    discount,
-    id,
-}: ProductProps) {
+interface ProductCardProps {
+    products: Product;
+}
+export default function ProductCard({ products }: ProductCardProps) {
     const router = useRouter();
     const dispatch = useDispatch();
     const likedProducts = useSelector((state: RootState) => state.liked.likedProducts);
-    const isLiked = likedProducts.includes(id);
+    const isLiked = likedProducts.includes(products.id);
 
-    const discountedPrice = price - (price * discount) / 100;
+    const discountPercentageedPrice = products.price - (products.price * products.discountPercentage) / 100;
 
     const handleCardClick = () => {
-        router.push(`/products/${id}`);
+        router.push(`/products/${products.id}`);
     };
 
     const handleLikeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
-        dispatch(toggleLike(id));
+        dispatch(toggleLike(products.id));
         toast.custom(() => (
             <div className={`dark:bg-zinc-900 p-4 rounded-md shadow-md w-full max-w-sm ${!isLiked ? "bg-[#5E3023]" : "bg-[#5E6067]"}`} role="alert">
                 <div className="text-sm font-medium mb-1 text-white">
                     {!isLiked ? "Added to liked products" : "Removed from liked products"}
                 </div>
                 <div className={`text-xs mb-3 text-white`}>
-                    {title} has been {!isLiked ? "added to" : "removed from"} your liked products.
+                    {products.title} has been {!isLiked ? "added to" : "removed from"} your liked products.
                 </div>
             </div>
         ));
@@ -58,10 +47,10 @@ export default function ProductCard({
         >
             <div className="relative group">
                 <Image
-                    src={image}
+                    src={products.images[0]}
                     width={500}
                     height={300}
-                    alt={title}
+                    alt={products.title}
                     className="w-full h-[300px] object-contain"
                 />
 
@@ -77,20 +66,21 @@ export default function ProductCard({
                 </Button>
             </div>
 
-            <CardContent className="p-4 flex flex-col justify-between h-[180px]">
+            <CardContent className="p-4 flex flex-col justify-between">
+                <div>{products.brand}</div>
                 <div>
-                    <h3 className="text-lg font-semibold line-clamp-1">{title}</h3>
-                    <p className="text-sm text-gray-600 mt-1 mb-2 line-clamp-2">{description}</p>
+                    <h3 className="text-lg font-semibold line-clamp-1">{products.title}</h3>
+                    <p className="text-sm text-gray-600 mt-1 mb-2 line-clamp-2">{products.description}</p>
                 </div>
 
-                <div className="flex items-center justify-center mt-auto">
-                    <div className="flex items-center gap-2 flex-wrap justify-center">
-                        <span className="text-xl font-bold text-green-600">₹{discountedPrice.toFixed(0)}</span>
-                        {discount > 0 && (
-                            <>
-                                <span className="text-sm line-through text-gray-400">₹{price}</span>
-                                <span className="text-sm font-medium text-red-500">({discount}% OFF)</span>
-                            </>
+                <div className="flex items-flex justify-center mt-2">
+                    <div className="flex items-end gap-2 flex-wrap justify-center">
+                        <span className="text-3xl font-bold text-green-600">${discountPercentageedPrice.toFixed(0)}</span>
+                        {products.discountPercentage > 0 && (
+                            <div className="flex gap-2 mb-1">
+                                <span className="text-sm line-through text-gray-400">${products.price}</span>
+                                <span className="text-sm font-medium text-red-500">({products.discountPercentage}% OFF)</span>
+                            </div>
                         )}
                     </div>
                 </div>

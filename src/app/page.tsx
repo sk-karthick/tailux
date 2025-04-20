@@ -19,7 +19,7 @@ export default function Home() {
   useEffect(() => {
     const liked = getLikedProductsFromCookies();
     dispatch(setLikes(liked));
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
