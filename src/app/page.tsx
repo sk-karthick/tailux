@@ -12,7 +12,6 @@ import useAuthRehydrate from "./components/hooks/useAuthRehydrate";
 export default function Home() {
 
   const { isAuthenticated, setIsAuthenticated } = useAuth();
-  const [searchValue, setSearchValue] = useState('');
   const dispatch = useDispatch();
   useAuthRehydrate();
 
@@ -23,10 +22,9 @@ export default function Home() {
 
   return (
     <>
-      <Navbar setSearchValue={setSearchValue} setIsUser={setIsAuthenticated}/>
       {!isAuthenticated && <Login setIsAuthenticated={setIsAuthenticated}/>}
       <h1>{isAuthenticated}</h1>
-      <ProductPage searchValue={searchValue}/>
+      <ProductPage />
     </>
   );
 }

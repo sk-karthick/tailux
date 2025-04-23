@@ -3,13 +3,16 @@ import React, { useMemo } from "react";
 import ProductCard from "./ProductCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useProducts } from "../hooks/useProducts";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/store/store";
 
 interface ProductPageProps {
     searchValue?: string;
 }
 
-const ProductPage: React.FC<ProductPageProps> = ({ searchValue = "" }) => {
+const ProductPage: React.FC<ProductPageProps> = () => {
     const { products, loading, error } = useProducts();
+    const searchValue = useSelector((state: RootState) => state.app.searchValue);
 
     const filteredProducts = useMemo(() => {
         if (!searchValue) return products;

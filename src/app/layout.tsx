@@ -8,6 +8,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import Head from "next/head";
+import Navbar from "./components/layout/Navbar";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -36,6 +37,7 @@ export default function RootLayout({
           <title>TailUX - Modern E-commerce</title>
         </Head>
         <body className="bg-background text-foreground min-h-screen antialiased">
+          <Navbar />
           {children}
           <SpeedInsights
 

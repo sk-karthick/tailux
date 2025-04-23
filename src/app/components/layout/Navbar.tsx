@@ -1,3 +1,5 @@
+"use client";
+
 import { Bell } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -8,22 +10,18 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
-import Image from "next/image";
+import { setSearchValue, setIsUser } from "@/app/store/appSlice";
 import { useLogout } from "@/app/auth/auth";
 
-interface Navbarprops {
-    setSearchValue: (value: string) => void;
-    setIsUser: (isOpen: boolean) => void;
-}
 
-const Navbar: React.FC<Navbarprops> = (props) => {
-    const { setSearchValue, setIsUser } = props
-
+const Navbar= () => {
+    const dispatch = useDispatch();
+    const searchValue = useSelector((state: RootState) => state.app.searchValue);
+    const user = useSelector((state: RootState) => state.user.user);
     const logout = useLogout();
     const [step, setStep] = useState(0);
-    const user = useSelector((state: RootState) => state.user.user);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -34,20 +32,18 @@ const Navbar: React.FC<Navbarprops> = (props) => {
     }, []);
 
     const actionLogout = () => {
-        logout()
-        setIsUser(false);
-    }
+        logout();
+        dispatch(setIsUser(false)); // Update user state on logout
+    };
 
     const ProfileView = () => {
         return (
             <>
                 <div className="flex items-center gap-2">
                     <Avatar>
-                        <AvatarImage src="/profile.jpg" alt="User" />
-                        <AvatarFallback onClick={ProfileView}>
-                            {user?.image ? (
-                                <Image width={100} height={100} src={user?.image} alt="user-avatar" />
-                            ) : user?.firstName?.charAt(0)}
+                        <AvatarImage src={user?.image || "/profile.jpg"} alt="User" />
+                        <AvatarFallback>
+                            {user?.firstName ? user.firstName.charAt(0) : "U"}
                         </AvatarFallback>
                     </Avatar>
                     <div>
@@ -64,8 +60,8 @@ const Navbar: React.FC<Navbarprops> = (props) => {
                     </Button>
                 </div>
             </>
-        )
-    }
+        );
+    };
 
     return (
         <>
@@ -77,7 +73,10 @@ const Navbar: React.FC<Navbarprops> = (props) => {
                     <PopoverTrigger>
                         <div className="flex items-center gap-2 cursor-pointer">
                             <Avatar>
-                                <AvatarImage src={user?.image || "/profile.jpg"} alt="User-profile" />
+                                <AvatarImage
+                                    src={user?.image || "/profile.jpg"}
+                                    alt="User-profile"
+                                />
                                 <AvatarFallback>
                                     {user?.firstName ? user.firstName.charAt(0) : "U"}
                                 </AvatarFallback>
@@ -86,22 +85,25 @@ const Navbar: React.FC<Navbarprops> = (props) => {
                                 {step === 0 ? (
                                     <p className="animate-fade-in">Welcome back! ✨</p>
                                 ) : (
-                                    <p className="animate-fade-in">{user?.firstName && user.firstName}</p>
+                                    <p className="animate-fade-in">
+                                        {user?.firstName && user.firstName}
+                                    </p>
                                 )}
                             </div>
                         </div>
-                        <PopoverContent className="w-[35svh] p-4 ml-4">
-                            {ProfileView()}
-                        </PopoverContent>
-
                     </PopoverTrigger>
+                    <PopoverContent className="w-[35svh] p-4 ml-4">
+                        {ProfileView()}
+                    </PopoverContent>
                 </Popover>
+
                 <div className="flex-1 px-4 max-w-md">
                     <Input
                         type="text"
                         placeholder="Search products or orders"
                         className="w-full rounded-full px-5 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        onChange={(e) => setSearchValue(e.target.value)}
+                        value={searchValue}
+                        onChange={(e) => dispatch(setSearchValue(e.target.value))}
                     />
                 </div>
 
@@ -111,14 +113,10 @@ const Navbar: React.FC<Navbarprops> = (props) => {
                         <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500 animate-ping" />
                         <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" />
                     </Button>
-                    {/* <CartSection cartItems={likedProducts.map(product => ({
-                        ...product,
-                        name: product.title,
-                        quantity: 1
-                    }))} /> */}
                 </div>
             </nav>
         </>
-    )
-}
+    );
+};
+
 export default Navbar;
