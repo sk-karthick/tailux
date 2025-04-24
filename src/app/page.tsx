@@ -1,7 +1,6 @@
 "use client";
-import Navbar from "./components/layout/Navbar";
 import Login from "./components/layout/Login";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import ProductPage from "./components/layout/ProductPage";
 import { getLikedProductsFromCookies } from "./lib/cookies";
 import { setLikes } from "./store/likedSlice";

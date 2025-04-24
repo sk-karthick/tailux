@@ -6,18 +6,14 @@ import { notFound } from "next/navigation";
 import { Product } from "@/types/product";
 
 
-export async function generateStaticParams() {
-    try {
-        const res = await fetch("https://dummyjson.com/products");
-        const data = await res.json();
-        return data.products.map((product: Product) => ({
-            id: product.id.toString(),
-        }));
-    } catch (error) {
-        console.error("Failed to generate static params:", error);
-        return [];
-    }
+export async function generateStaticParams(): Promise<{ id: string }[]> {
+    const res = await fetch("https://dummyjson.com/products");
+    const data = await res.json();
+    return data.products.map((product: Product) => ({
+        id: product.id.toString(),
+    }));
 }
+
 
 async function getProduct(id: string) {
     try {
@@ -34,21 +30,22 @@ async function getProduct(id: string) {
         throw error;
     }
 } 
-
-export default async function ProductPage({ params }: { params: { id: string } }) {
-    const { id } = await params;
-    const productId = parseInt(id, 10);
+export default async function ProductPage({
+    params,
+}: {
+    params: { id: string };
+}) {
+    const productId = parseInt(params.id, 10);
 
     if (isNaN(productId)) {
         notFound();
     }
 
-    try {
-        const product = await getProduct(id);
-        if (!product?.id) notFound();
-        return <ProductDetails product={product} />;
-    } catch (error) {
-        console.error("Error in ProductPage:", error);
+    const product = await getProduct(params.id);
+
+    if (!product?.id) {
         notFound();
     }
+
+    return <ProductDetails product={product} />;
 }

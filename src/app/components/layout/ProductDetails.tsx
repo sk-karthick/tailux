@@ -1,10 +1,14 @@
 "use client";
 import Image from "next/image";
-import { Star } from "lucide-react";
 import { Product } from "@/types/product";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Reviews from "./Reviews";
+import ProductDescription from "./ProductDescription";
+import ProductDimensions from "./ProductDimensions";
+import StarReview from "./StarReview";
+import CheckStockPolicies from "./CheckStockPolicies";
+import ProductTitleDescription from "./ProductTitleDescription";
 
 interface ProductDetailsProps {
     product: Product;
@@ -13,13 +17,8 @@ interface ProductDetailsProps {
 export default function ProductDetails({ product }: ProductDetailsProps) {
     const [currentImage, setCurrentImage] = useState(product.images[0]);
     const [imageError, setImageError] = useState(false);
-
+   
     if (!product) return <div>Product not found</div>;
-
-    // Calculate prices (moved outside JSX for cleaner code)
-    const currentPrice = (product.price * 83).toFixed(0);
-    const originalPrice = (product.price * 83 * 1.2).toFixed(0);
-
 
 
     return (
@@ -90,72 +89,15 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
                 </div>
             </div>
 
-            <div className="flex flex-col justify-between max-h-[92dvh] overflow-y-auto">
+            <div className="flex flex-col justify-between max-h-[92dvh] overflow-y-auto pr-3">
                 <div>
-                    <h1 className="text-3xl font-bold mb-2">{product.title}</h1>
-                    <p className="text-gray-600 mb-4">{product.description}</p>
-
-                    <div className="flex items-center mb-4">
-                        <span className="text-3xl font-semibold text-[#390007]">
-                            ₹{currentPrice}
-                        </span>
-                        {product.discountPercentage > 0 && (
-                            <>
-                                <span className="ml-4 text-sm text-gray-400 line-through">
-                                    ₹{originalPrice}
-                                </span>
-                                <span className="ml-2 text-sm bg-[#390007] text-white px-2 py-0.5 rounded">
-                                    {product.discountPercentage}% OFF
-                                </span>
-                            </>
-                        )}
-                    </div>
-
-                    <div className="flex items-center gap-2 mb-4">
-                        <div className="flex">
-                            {[...Array(5)].map((_, i) => (
-                                <Star
-                                    key={i}
-                                    className={`w-5 h-5 ${i < Math.floor(product.rating)
-                                        ? 'text-yellow-400 fill-yellow-400'
-                                        : 'text-gray-300'
-                                        }`}
-                                />
-                            ))}
-                        </div>
-                        <span className="text-sm">
-                            {product.rating.toFixed(1)} / 5
-                        </span>
-                        <span className="text-xs text-gray-500">
-                            ({product.reviews?.length || 0} reviews)
-                        </span>
-                    </div>
-
-                    <div className="space-y-2 text-sm mb-6">
-                        {product.brand && (
-                            <p>
-                                <span className="font-medium">Brand:</span> {product.brand}
-                            </p>
-                        )}
-                        {product.category && (
-                            <p>
-                                <span className="font-medium">Category:</span> {product.category}
-                            </p>
-                        )}
-                        {product.stock && (
-                            <p>
-                                <span className="font-medium">Availability:</span> {product.stock > 0
-                                    ? `${product.stock} in stock`
-                                    : 'Out of stock'}
-                            </p>
-                        )}
-                    </div>
-                    
-                    <Reviews product={product}  />
+                    <ProductTitleDescription product={product} />
+                    <StarReview product={product} />
+                    <CheckStockPolicies product={product}/>
+                    <ProductDimensions  dimensions = {product.dimensions}/>
+                    <ProductDescription description={product.description} />
+                    <Reviews product={product} />
                 </div>
-
-                {/* Action Buttons */}
-
             </div>
         </div>
     );

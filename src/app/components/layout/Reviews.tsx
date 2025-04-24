@@ -1,7 +1,7 @@
 import { Star } from 'lucide-react';
 import React, { useState } from 'react'
 
-import { Product, Review } from '@/types/product';
+import { Product } from '@/types/product';
 
 interface productProps {
   product: Product
@@ -49,7 +49,7 @@ const Reviews = (props: productProps) => {
 
               return (
                 <div key={stars} className="flex items-center gap-2 mb-2">
-                  <div className="w-8 text-sm">{stars} star</div>
+                  <div className="w-8 text-sm flex flex-row">{stars}</div>
                   <div className="flex-1 bg-gray-200 rounded-full h-2.5">
                     <div
                       className="bg-yellow-400 h-2.5 rounded-full"
