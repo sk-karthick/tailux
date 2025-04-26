@@ -42,6 +42,7 @@ const useFetch = () => {
       localStorage.setItem("token", data.accessToken);
       localStorage.setItem("refresh_token", data.refreshToken);
       localStorage.setItem("user", JSON.stringify(data));
+      console.log("user", JSON.stringify(data));
       dispatch(setUser(data));
       setIsUser(true);
     } catch (err) {

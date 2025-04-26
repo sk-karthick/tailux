@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { Product } from "@/types/product";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Reviews from "./Reviews";
 import ProductDescription from "./ProductDescription";
@@ -9,15 +9,17 @@ import ProductDimensions from "./ProductDimensions";
 import StarReview from "./StarReview";
 import CheckStockPolicies from "./CheckStockPolicies";
 import ProductTitleDescription from "./ProductTitleDescription";
+import { useRecentlyViewed } from "../hooks/useRecentlyViewed";
 
 interface ProductDetailsProps {
     product: Product;
 }
 
 export default function ProductDetails({ product }: ProductDetailsProps) {
+    useRecentlyViewed(product);
     const [currentImage, setCurrentImage] = useState(product.images[0]);
     const [imageError, setImageError] = useState(false);
-   
+
     if (!product) return <div>Product not found</div>;
 
 
@@ -42,7 +44,7 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
                             />
                         )}
                     </div>
-
+                    
                     <div className="flex gap-2 flex-col overflow-y-auto py-2 flex-shrink-0 h-[50dvh]">
                         {product.images.map((image, index) => (
                             <button

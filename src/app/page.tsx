@@ -22,7 +22,6 @@ export default function Home() {
   return (
     <>
       {!isAuthenticated && <Login setIsAuthenticated={setIsAuthenticated}/>}
-      <h1>{isAuthenticated}</h1>
       <ProductPage />
     </>
   );

@@ -1,10 +1,8 @@
-export const dynamic = "error";
-export const dynamicParams = false;
 
 import ProductDetails from "@/app/components/layout/ProductDetails";
 import { notFound } from "next/navigation";
 import { Product } from "@/types/product";
-
+import { redis } from "@/lib/redis";
 
 export async function generateStaticParams(): Promise<{ id: string }[]> {
     const res = await fetch("https://dummyjson.com/products");
@@ -14,9 +12,17 @@ export async function generateStaticParams(): Promise<{ id: string }[]> {
     }));
 }
 
-
-async function getProduct(id: string) {
+async function getProduct(id: string): Promise<Product | null> {
     try {
+        let product: Product | null = await redis.get(`product:${id}`);
+
+        if (product) {
+            console.log("Loaded from Redis cache");
+            if (typeof product === "string") {
+                product = JSON.parse(product);
+            }
+        }
+
         const res = await fetch(`https://dummyjson.com/products/${id}`, {
             next: { revalidate: 60 },
             signal: AbortSignal.timeout(3000)
@@ -24,12 +30,20 @@ async function getProduct(id: string) {
 
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
-        return await res.json();
+        product = await res.json();
+
+        await redis.set(`product:${id}`, JSON.stringify(product), {
+            ex: 86400,
+        });
+
+        return product;
     } catch (error) {
         console.error("Fetch error:", error);
         throw error;
     }
-} 
+}
+
+
 export default async function ProductPage({
     params,
 }: {
