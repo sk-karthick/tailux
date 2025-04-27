@@ -24,7 +24,9 @@ const ProductPage: React.FC<ProductPageProps> = () => {
 
     return (
         <div className="px-4 py-6 pb-4 overflow-y-auto max-h-[91svh]">
-            {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+            {error && <p className="text-red-500 text-center mb-4">
+                {error}
+            </p>}
 
             <RecentlyViewProduct />
 

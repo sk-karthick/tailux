@@ -14,9 +14,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
 import { setSearchValue, setIsUser } from "@/app/store/appSlice";
 import { useLogout } from "@/app/auth/auth";
+import CartDialog from "./CartDialog";
 
 
-const Navbar= () => {
+const Navbar = () => {
     const dispatch = useDispatch();
     const searchValue = useSelector((state: RootState) => state.app.searchValue);
     const user = useSelector((state: RootState) => state.user.user);
@@ -63,6 +64,28 @@ const Navbar= () => {
         );
     };
 
+    const notificationPopover = () => {
+        return (
+            <Popover>
+                <PopoverTrigger asChild>
+                    <Button variant="ghost" size="icon" className="relative">
+                        <Bell className="w-[40px] h-[40px]" />
+                        {/* <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500 animate-ping" /> */}
+                        {/* <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" /> */}
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80">
+                    <div className="flex flex-col gap-2">
+                        <div className="flex items-center justify-center p-2">
+                            <p className="text-sm">No Notifications</p>
+                        </div>
+                    </div>
+                </PopoverContent>
+            </Popover>
+        )
+    }
+
+
     return (
         <>
             <div className="branding-name bg-[#390007] text-white h-8 py-2 text-xl flex items-center justify-center">
@@ -106,13 +129,9 @@ const Navbar= () => {
                         onChange={(e) => dispatch(setSearchValue(e.target.value))}
                     />
                 </div>
-
                 <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="icon" className="relative">
-                        <Bell className="w-[40px] h-[40px]" />
-                        <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500 animate-ping" />
-                        <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" />
-                    </Button>
+                    {notificationPopover()}
+                    {CartDialog()}
                 </div>
             </nav>
         </>

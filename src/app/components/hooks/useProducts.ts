@@ -21,7 +21,6 @@ export const useProducts = () => {
             const json: ProductAPIResponse = await res.json();
             setProducts(json.products);
         } catch (err) {
-            console.error("Error fetching products", err);
             setError("Failed to load products. Please try again.");
         } finally {
             setLoading(false);
