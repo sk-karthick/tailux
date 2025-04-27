@@ -13,9 +13,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(400).json({ message: "Missing userId or productId" });
         }
 
-        await redis.lrem(`recently_viewed:${userId}`, 0, productId);
-        await redis.lpush(`recently_viewed:${userId}`, productId);
-        await redis.ltrim(`recently_viewed:${userId}`, 0, 9);
+        await redis.lrem(`add_to_cart:${userId}`, 0, productId);
+        await redis.lpush(`add_to_cart:${userId}`, productId);
+        await redis.ltrim(`add_to_cart:${userId}`, 0, 9);
 
         res.status(200).json({ message: "OK" });
     } catch (error) {

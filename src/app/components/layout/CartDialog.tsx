@@ -48,7 +48,6 @@ const CartDialog = () => {
                             {cartItems.map((item) => (
                                 <div key={item.id} className="flex items-center gap-4">
                                     <div className="relative w-16 h-16 rounded-md overflow-hidden bg-gray-100">
-                                        {/* Replace with actual image */}
                                         <div className="w-full h-full flex items-center justify-center text-xs text-gray-500">
                                             Product Image
                                         </div>

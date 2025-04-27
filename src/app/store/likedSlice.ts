@@ -1,4 +1,3 @@
-// redux/likedSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { saveLikedProductsToCookies, getLikedProductsFromCookies } from "../lib/cookies";
 
